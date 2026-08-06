@@ -1,69 +1,91 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mobile Full Screen View</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Video Feed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* পুরো স্ক্রিন ব্যবহার করার জন্য CSS */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* স্ক্রলবার হাইড করার জন্য */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
         }
-
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden; /* স্ক্রল বন্ধ থাকবে */
-            background-color: #000;
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
-
-        .container {
-            display: flex;
-            flex-direction: column; /* ভিডিওগুলো একটির নিচে আরেকটি থাকবে */
-            width: 100vw;
-            height: 100vh;
-        }
-
+        
+        /* ভিডিও কন্টেইনার ফুল মোবাইল হাইট */
         .video-wrapper {
-            flex: 1; /* স্ক্রিনকে সমান দুই ভাগে ভাগ করবে */
             width: 100%;
-            height: 50%;
+            height: 80vh; /* মোবাইলে ভিডিওর উচ্চতা */
+            background: #000;
+            margin-bottom: 10px;
             position: relative;
         }
 
         iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100% !important;
+            height: 100% !important;
             border: none;
         }
     </style>
 </head>
-<body>
+<body class="bg-black text-white no-scrollbar">
 
-    <div class="container">
-        <!-- প্রথম ভিডিও (উপরের অংশ) -->
-        <div class="video-wrapper">
-            <iframe src="https://www.xnxx.com/embedframe/okuihhk89f8" allowfullscreen="allowfullscreen"></iframe>
+    <!-- Main Container (Mobile Responsive Only) -->
+    <div class="max-w-md mx-auto w-full flex flex-col overflow-y-auto h-screen">
+        
+        <!-- Video 1 -->
+        <div class="video-wrapper overflow-hidden rounded-b-xl shadow-lg">
+            <iframe 
+                src="https://www.xnxx.com/embedframe/uecmkvvb033" 
+                frameborder="0" 
+                scrolling="no" 
+                allowfullscreen="true"
+                referrerpolicy="no-referrer"
+                loading="lazy">
+            </iframe>
         </div>
 
-        <!-- দ্বিতীয় ভিডিও (নিচের অংশ) -->
-        <div class="video-wrapper">
-            <iframe src="https://www.xnxx.com/embedframe/udioddf3e09" allowfullscreen="allowfullscreen"></iframe>
+        <!-- Video 2 -->
+        <div class="video-wrapper overflow-hidden rounded-xl shadow-lg">
+            <iframe 
+                src="https://www.xnxx.com/embedframe/opftmio1f38" 
+                frameborder="0" 
+                scrolling="no" 
+                allowfullscreen="true"
+                referrerpolicy="no-referrer"
+                loading="lazy">
+            </iframe>
         </div>
+
+        <!-- Footer Space for More Overflow Feel -->
+        <div class="h-20 w-full flex items-center justify-center text-gray-600 text-sm italic">
+            End of Feed
+        </div>
+
     </div>
 
     <script>
-        // স্ক্রিন সব সময় ফুল রাখার জন্য ছোট স্ক্রিপ্ট
-        window.addEventListener("orientationchange", function() {
-            window.location.reload();
+        // Vanilla JS for optimization
+        document.addEventListener("DOMContentLoaded", () => {
+            // CORS বা কানেকশন এরর হ্যান্ডেল করার জন্য
+            const iframes = document.querySelectorAll('iframe');
+            
+            iframes.forEach(iframe => {
+                // ভিডিও লোড স্পিড বাড়ানোর ট্রিক
+                iframe.setAttribute('importance', 'high');
+                
+                // যদি ফ্রেম ব্লক হয় তবে কনসোল ওয়ার্নিং এড়ানোর জন্য
+                iframe.onerror = function() {
+                    console.warn("Video content could not be loaded due to provider restrictions.");
+                };
+            });
         });
-    </script>
 
+        // ব্রাউজার যদি স্ক্রল লক করে তবে তা রিলিজ করা
+        document.body.style.overflow = "auto";
+    </script>
 </body>
 </html>
-
