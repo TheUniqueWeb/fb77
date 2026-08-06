@@ -2,71 +2,369 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Referrer Policy hide করার জন্য এই মেটা ট্যাগটি জরুরি -->
-    <meta name="referrer" content="no-referrer">
-    <title>Mobile Video Player</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EarnMax Pro - Ultimate Connected</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #000; margin: 0; padding: 0; }
-        .video-container {
-            position: relative;
-            width: 100%;
-            /* ৫১০x৪০০ রেশিও অনুযায়ী হাইট */
-            padding-bottom: 78.43%; 
-            height: 0;
-            background: #111;
-            margin-bottom: 15px;
-        }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100% !important;
-            height: 100% !important;
-            border: none;
-        }
+        :root { --primary: #4F46E5; --secondary: #06B6D4; --accent: #F59E0B; --success: #10B981; --surface: #FFFFFF; --bg: #F8FAFC; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: #1E293B; user-select: none; -webkit-tap-highlight-color: transparent; }
+        .max-card { background: var(--surface); border: 1px solid rgba(226, 232, 240, 0.8); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04); transition: all 0.3s ease; }
+        .gradient-bg { background: linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%); }
+        .gold-gradient { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); }
+        .nav-active { color: var(--primary) !important; position: relative; }
+        .nav-active::after { content: ''; position: absolute; bottom: -8px; width: 6px; height: 6px; background: var(--primary); border-radius: 50%; }
+        .glass-header { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .payment-input { background: #F1F5F9; border: 2px solid transparent; transition: all 0.3s; }
+        .payment-input:focus { border-color: var(--primary); background: #FFFFFF; outline: none; }
+        .method-selected { border: 2px solid var(--primary) !important; background: #EEF2FF !important; }
+        .method-selected img { grayscale: 0 !important; opacity: 1 !important; transform: scale(1.1); }
+        .slider-dot.active { width: 24px; background: var(--primary); }
     </style>
 </head>
-<body>
+<body class="pb-28">
 
-    <div class="max-w-md mx-auto">
-        <!-- Video 1 -->
-        <div class="video-container">
-            <iframe 
-                src="https://www.xnxx.com/embedframe/uecmkvvb033" 
-                frameborder="0" 
-                scrolling="no" 
-                allowfullscreen="true"
-                sandbox="allow-forms allow-scripts allow-pointer-lock allow-same-origin allow-top-navigation"
-                referrerpolicy="no-referrer">
-            </iframe>
-        </div>
+<!-- ==========================================
+     HYPER-CONFIG SECTION (সব কন্ট্রোল এখানে)
+=========================================== -->
+<script>
+    const CONFIG = {
+        botToken: "YOUR_BOT_TOKEN", // আপনার টেলিগ্রাম বট টোকেন দিন
+        adminId: "YOUR_ADMIN_ID",   // আপনার টেলিগ্রাম আইডি দিন (যেখানে উইথড্র নোটিশ যাবে)
+        monetagId: "892110",        // Monetag Ad Zone ID
+        currency: "৳",
+        rewards: {
+            perAd: 1.50,
+            perRefer: 5.00,
+            dailyBonus: 2.00,
+            minWithdraw: 100.00
+        },
+        links: {
+            group: "https://t.me/your_group",
+            channel: "https://t.me/your_channel"
+        },
+        app: {
+            name: "EARNMAX ULTIMATE",
+            notice: "🔥 পেমেন্ট রিকোয়েস্ট দেওয়ার সাথে সাথে এডমিনকে বটের মাধ্যমে জানানো হবে। ১০০% ট্রাস্টেড!",
+            banners: [
+                "https://i.ibb.co/q9Wf90P/banner1.jpg",
+                "https://i.ibb.co/L5pG8Vn/banner2.jpg",
+                "https://i.ibb.co/q9Wf90P/banner1.jpg",
+                "https://i.ibb.co/L5pG8Vn/banner2.jpg"
+            ],
+            rules: [
+                "১. সরাসরি টেলিগ্রাম ক্লাউড স্টোরেজের সাথে কানেক্টেড, ডাটা হারাবে না।",
+                "২. প্রতিদিন ২০টি এড দেখতে পারবেন।",
+                "৩. পেমেন্ট রিকোয়েস্ট দেওয়ার ২৪ ঘণ্টার মধ্যে আপনার একাউন্টে টাকা পৌঁছে যাবে।",
+                "৪. রেফার বোনাস পেতে হলে রেফার মেম্বারকে অবশ্যই কাজ করতে হবে।"
+            ]
+        }
+    };
+</script>
 
-        <!-- Video 2 -->
-        <div class="video-container">
-            <iframe 
-                src="https://www.xnxx.com/embedframe/opftmio1f38" 
-                frameborder="0" 
-                scrolling="no" 
-                allowfullscreen="true"
-                sandbox="allow-forms allow-scripts allow-pointer-lock allow-same-origin allow-top-navigation"
-                referrerpolicy="no-referrer">
-            </iframe>
+<div id="app-container">
+    <!-- Premium Header -->
+    <header class="glass-header sticky top-0 z-[100] px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl gradient-bg flex items-center justify-center shadow-lg shadow-indigo-200">
+                <i class="fas fa-gem text-white text-lg"></i>
+            </div>
+            <div>
+                <h1 class="font-extrabold text-sm tracking-tight text-slate-800 uppercase" id="cfg-app-name"></h1>
+                <div class="flex items-center gap-1">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Bot Cloud Live</span>
+                </div>
+            </div>
         </div>
+        <div class="flex items-center gap-2 bg-slate-100 p-1.5 pr-4 rounded-full border border-slate-200">
+            <img id="tg-user-photo" src="https://ui-avatars.com/api/?name=User" class="w-7 h-7 rounded-full shadow-sm">
+            <span id="tg-user-name" class="text-xs font-bold text-slate-700">Loading...</span>
+        </div>
+    </header>
+
+    <div class="bg-indigo-50 border-b border-indigo-100 py-2.5">
+        <marquee id="cfg-marquee" class="text-xs font-semibold text-indigo-600"></marquee>
     </div>
 
-    <script>
-        // ভিডিও লোড না হলে অটো রিফ্রেশ বা মেসেজ দেখানোর জন্য
-        window.onload = function() {
-            const iframes = document.querySelectorAll('iframe');
-            iframes.forEach(f => {
-                // কোনো এরর হলে কনসোলে দেখাবে
-                f.onerror = function() {
-                    console.log("Loading failed, check domain restrictions.");
-                };
-            });
-        };
-    </script>
+    <main class="p-5 space-y-8">
+        
+        <!-- HOME SECTION -->
+        <div id="home-view" class="view-content space-y-8">
+            <div class="relative w-full h-48 rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white">
+                <div id="slider-engine" class="flex h-full transition-transform duration-700 ease-in-out"></div>
+                <div id="slider-pagination" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5"></div>
+            </div>
+
+            <div class="gradient-bg p-8 rounded-[3rem] shadow-xl relative overflow-hidden group">
+                <p class="text-indigo-100 text-[10px] font-bold uppercase tracking-widest mb-2 opacity-80">Net Worth Balance</p>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-white text-4xl font-black" id="bal-main">0.00</span>
+                    <span class="text-indigo-100 font-bold text-sm">৳</span>
+                </div>
+            </div>
+
+            <div onclick="claimDailyReward()" class="gold-gradient p-1 rounded-[2.5rem] cursor-pointer active:scale-95 transition-all shadow-xl shadow-amber-200">
+                <div class="bg-white/10 p-5 rounded-[2.3rem] flex justify-between items-center px-8">
+                    <div class="flex items-center gap-5">
+                        <div class="w-14 h-14 bg-white rounded-3xl flex items-center justify-center shadow-lg"><i class="fas fa-gift text-2xl text-amber-500"></i></div>
+                        <div><h4 class="text-white font-black text-lg">Daily Reward</h4><p class="text-amber-100 text-[10px] font-bold uppercase">Claim ৳2.00 Bonus</p></div>
+                    </div>
+                    <i class="fas fa-crown text-white/50 text-xl"></i>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <a id="link-group" href="#" class="max-card p-5 rounded-3xl flex flex-col items-center gap-3 border-b-4 border-b-blue-500">
+                    <i class="fab fa-telegram-plane text-2xl text-blue-500"></i><span class="text-xs font-extrabold uppercase">Support Group</span>
+                </a>
+                <a id="link-channel" href="#" class="max-card p-5 rounded-3xl flex flex-col items-center gap-3 border-b-4 border-b-indigo-500">
+                    <i class="fas fa-bullhorn text-2xl text-indigo-500"></i><span class="text-xs font-extrabold uppercase">News Channel</span>
+                </a>
+            </div>
+
+            <div class="max-card p-8 rounded-[2.5rem]">
+                <h3 class="font-black text-slate-800 text-lg mb-6 flex items-center gap-3"><span class="w-1.5 h-6 bg-indigo-600 rounded-full"></span>Guidelines</h3>
+                <div id="rules-container" class="space-y-4"></div>
+            </div>
+        </div>
+
+        <!-- ADS SECTION -->
+        <div id="ads-view" class="view-content hidden space-y-8 py-10 text-center">
+            <div class="w-40 h-40 mx-auto gradient-bg rounded-full flex items-center justify-center shadow-2xl animate-bounce">
+                <i class="fas fa-play text-5xl text-white ml-2"></i>
+            </div>
+            <h2 class="text-3xl font-black text-slate-800">Video Rewards</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="max-card p-6 rounded-3xl"><p class="text-[10px] font-black text-slate-400 mb-1">Earning</p><p class="text-2xl font-black text-green-600">৳ <span id="ad-pay">0.00</span></p></div>
+                <div class="max-card p-6 rounded-3xl"><p class="text-[10px] font-black text-slate-400 mb-1">Daily Limit</p><p class="text-2xl font-black text-slate-800" id="ad-limit">0/20</p></div>
+            </div>
+            <button onclick="playAd()" class="w-full gradient-bg text-white py-6 rounded-[2.5rem] font-black text-xl shadow-xl active:scale-95 transition">START VIDEO AD</button>
+        </div>
+
+        <!-- REFER SECTION -->
+        <div id="refer-view" class="view-content hidden space-y-8">
+            <div class="max-card p-10 rounded-[3rem] text-center">
+                <div class="w-20 h-20 bg-indigo-600/10 rounded-full flex items-center justify-center mx-auto mb-6"><i class="fas fa-user-friends text-3xl text-indigo-600"></i></div>
+                <h2 class="text-2xl font-black text-slate-800 mb-2">Invite Friends</h2>
+                <div class="flex items-center gap-2 p-2 bg-slate-50 border-2 border-slate-100 rounded-3xl">
+                    <input id="refer-link-box" readonly class="bg-transparent border-none text-[10px] w-full px-4 font-bold outline-none" value="">
+                    <button onclick="copyInvite()" class="bg-indigo-600 text-white px-8 py-4 rounded-[1.4rem] text-xs font-black">COPY</button>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="max-card p-6 rounded-3xl text-center"><p class="text-[10px] font-black text-slate-400">Total Refer</p><p class="text-3xl font-black text-slate-800" id="ref-count">0</p></div>
+                <div class="max-card p-6 rounded-3xl text-center"><p class="text-[10px] font-black text-slate-400">Bonus Earned</p><p class="text-3xl font-black text-indigo-600">৳ <span id="ref-inc">0</span></p></div>
+            </div>
+        </div>
+
+        <!-- WITHDRAW SECTION -->
+        <div id="withdraw-view" class="view-content hidden space-y-8">
+            <div class="p-8 rounded-[3rem] shadow-2xl relative overflow-hidden h-56 flex flex-col justify-between" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+                <div class="absolute top-0 right-0 p-10 opacity-10"><i class="fas fa-wallet text-8xl"></i></div>
+                <div class="flex justify-between items-start"><span class="text-white font-bold text-sm tracking-widest">MAX CARD</span><i class="fab fa-cc-mastercard text-white/50 text-3xl"></i></div>
+                <div><p class="text-slate-400 text-[10px] uppercase font-bold mb-1">Available Balance</p><h2 class="text-white text-4xl font-black">৳ <span class="global-balance">0.00</span></h2></div>
+                <div class="flex justify-between text-[10px] text-slate-400 font-mono"><span id="card-holder">USER</span><span>EXP: 12/29</span></div>
+            </div>
+
+            <div class="space-y-6">
+                <div class="grid grid-cols-3 gap-3">
+                    <div onclick="selectMethod('Bkash')" class="method-btn max-card p-4 rounded-3xl text-center cursor-pointer flex flex-col items-center gap-2">
+                        <img src="https://searchvectorlogo.com/wp-content/uploads/2020/02/bkash-logo-vector.png" class="h-8 grayscale opacity-60"><span class="text-[9px] font-black uppercase">Bkash</span>
+                    </div>
+                    <div onclick="selectMethod('Nagad')" class="method-btn max-card p-4 rounded-3xl text-center cursor-pointer flex flex-col items-center gap-2">
+                        <img src="https://download.logo.wine/logo/Nagad/Nagad-Logo.wine.png" class="h-8 grayscale opacity-60"><span class="text-[9px] font-black uppercase">Nagad</span>
+                    </div>
+                    <div onclick="selectMethod('Rocket')" class="method-btn max-card p-4 rounded-3xl text-center cursor-pointer flex flex-col items-center gap-2">
+                        <img src="https://www.bdshop.com/pub/media/reverse-withdrawal-rocket.png" class="h-8 grayscale opacity-60"><span class="text-[9px] font-black uppercase">Rocket</span>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <input id="wd-number" type="number" placeholder="Enter Account Number" class="payment-input w-full py-5 px-6 rounded-[2rem] font-bold text-sm">
+                    <input id="wd-amount" type="number" placeholder="Enter Amount" class="payment-input w-full py-5 px-6 rounded-[2rem] font-bold text-sm">
+                    <button onclick="processWithdraw()" class="w-full gradient-bg text-white py-6 rounded-[2.5rem] font-black text-lg shadow-xl active:scale-95 transition">CONFIRM WITHDRAWAL</button>
+                </div>
+            </div>
+            <div id="wd-history" class="space-y-4 pb-10"></div>
+        </div>
+    </main>
+
+    <!-- Navigation -->
+    <nav class="fixed bottom-6 left-6 right-6 h-20 glass-header rounded-[2.5rem] flex justify-around items-center px-4 z-[1000] shadow-2xl border border-white">
+        <button onclick="navTo('home')" class="nav-btn flex flex-col items-center gap-1 nav-active transition-all duration-300"><i class="fas fa-home-alt text-xl"></i><span class="text-[9px] font-black uppercase tracking-widest">Home</span></button>
+        <button onclick="navTo('ads')" class="nav-btn flex flex-col items-center gap-1 text-slate-400 transition-all duration-300"><i class="fas fa-circle-play text-xl"></i><span class="text-[9px] font-black uppercase tracking-widest">Tasks</span></button>
+        <button onclick="navTo('refer')" class="nav-btn flex flex-col items-center gap-1 text-slate-400 transition-all duration-300"><i class="fas fa-users-viewfinder text-xl"></i><span class="text-[9px] font-black uppercase tracking-widest">Refer</span></button>
+        <button onclick="navTo('withdraw')" class="nav-btn flex flex-col items-center gap-1 text-slate-400 transition-all duration-300"><i class="fas fa-wallet text-xl"></i><span class="text-[9px] font-black uppercase tracking-widest">Payout</span></button>
+    </nav>
+</div>
+
+<div id="toast" class="fixed top-10 left-1/2 -translate-x-1/2 glass-header px-8 py-4 rounded-[2rem] text-sm font-black hidden z-[5000] border-2 border-indigo-500 shadow-2xl text-indigo-600 flex items-center gap-3">
+    <i class="fas fa-info-circle"></i><span id="toast-msg">Message</span>
+</div>
+
+<script>
+    // --- DATABASE & CONNECTION ENGINE ---
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    let state = {
+        balance: 0.00,
+        referrals: 0,
+        adCount: 0,
+        lastClaim: null,
+        method: '',
+        history: []
+    };
+
+    // ডাটা লোড (Cloud Storage)
+    function loadData() {
+        tg.CloudStorage.getItems(['app_state'], (err, values) => {
+            if (!err && values.app_state) {
+                state = JSON.parse(values.app_state);
+                updateUI();
+            }
+        });
+    }
+
+    // ডাটা সেভ (Cloud Storage)
+    function saveData() {
+        tg.CloudStorage.setItem('app_state', JSON.stringify(state));
+        updateUI();
+    }
+
+    // এডমিন নোটিফিকেশন (Bot API)
+    async function notifyAdmin(text) {
+        const url = `https://api.telegram.org/bot${CONFIG.botToken}/sendMessage`;
+        await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: CONFIG.adminId, text: text, parse_mode: 'HTML' })
+        });
+    }
+
+    // --- APP LOGIC ---
+    function initApp() {
+        document.getElementById('cfg-app-name').innerText = CONFIG.app.name;
+        document.getElementById('cfg-marquee').innerText = CONFIG.app.notice;
+        document.getElementById('ad-pay').innerText = CONFIG.rewards.perAd.toFixed(2);
+        document.getElementById('link-group').href = CONFIG.links.group;
+        document.getElementById('link-channel').href = CONFIG.links.channel;
+
+        const se = document.getElementById('slider-engine');
+        CONFIG.app.banners.forEach(url => se.innerHTML += `<img src="${url}" class="w-full h-full flex-shrink-0 object-cover">`);
+
+        const rc = document.getElementById('rules-container');
+        CONFIG.app.rules.forEach(rule => rc.innerHTML += `<p class="text-xs text-slate-500 font-semibold">• ${rule}</p>`);
+
+        if(tg.initDataUnsafe?.user) {
+            const u = tg.initDataUnsafe.user;
+            document.getElementById('tg-user-name').innerText = u.first_name;
+            if(u.photo_url) document.getElementById('tg-user-photo').src = u.photo_url;
+            document.getElementById('refer-link-box').value = `https://t.me/your_bot?start=${u.id}`;
+            document.getElementById('card-holder').innerText = u.first_name.toUpperCase();
+        }
+
+        loadData();
+        startSlider();
+    }
+
+    function navTo(view) {
+        document.querySelectorAll('.view-content').forEach(v => v.classList.add('hidden'));
+        document.getElementById(`${view}-view`).classList.remove('hidden');
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('nav-active', 'text-indigo-600'));
+        event.currentTarget.classList.add('nav-active');
+    }
+
+    function updateUI() {
+        document.getElementById('bal-main').innerText = state.balance.toFixed(2);
+        document.querySelectorAll('.global-balance').forEach(el => el.innerText = state.balance.toFixed(2));
+        document.getElementById('ad-limit').innerText = `${state.adCount}/20`;
+        document.getElementById('ref-count').innerText = state.referrals;
+        document.getElementById('ref-inc').innerText = (state.referrals * CONFIG.rewards.perRefer).toFixed(2);
+        renderHistory();
+    }
+
+    function playAd() {
+        if(state.adCount >= 20) return showToast("Daily Limit Reached!");
+        showToast("⏳ Loading Ad...");
+        setTimeout(() => {
+            state.balance += CONFIG.rewards.perAd;
+            state.adCount++;
+            saveData();
+            showToast("✅ Ad Reward Added!");
+        }, 2000);
+    }
+
+    function claimDailyReward() {
+        const today = new Date().toDateString();
+        if(state.lastClaim === today) return showToast("Already Claimed!");
+        state.balance += CONFIG.rewards.dailyBonus;
+        state.lastClaim = today;
+        saveData();
+        showToast("🎁 Daily Bonus Added!");
+    }
+
+    function selectMethod(m) {
+        state.method = m;
+        document.querySelectorAll('.method-btn').forEach(btn => btn.classList.remove('method-selected'));
+        event.currentTarget.classList.add('method-selected');
+    }
+
+    async function processWithdraw() {
+        const num = document.getElementById('wd-number').value;
+        const amt = parseFloat(document.getElementById('wd-amount').value);
+        if(!state.method || num.length < 10 || amt < CONFIG.rewards.minWithdraw || amt > state.balance) return showToast("⚠️ Invalid Information!");
+
+        const tx = { id: 'TX'+Math.floor(Math.random()*999999), amt, method: state.method, date: new Date().toLocaleString(), status: 'Success' };
+        state.balance -= amt;
+        state.history.unshift(tx);
+        saveData();
+
+        const user = tg.initDataUnsafe?.user;
+        const msg = `💰 <b>Withdraw Alert!</b>\n\nUser: ${user?.first_name} (<code>${user?.id}</code>)\nAmount: ৳${amt}\nMethod: ${state.method}\nNumber: ${num}\nTime: ${tx.date}`;
+        await notifyAdmin(msg);
+
+        showToast("✅ Payout Request Sent!");
+    }
+
+    function renderHistory() {
+        const h = document.getElementById('wd-history');
+        h.innerHTML = state.history.map(item => `
+            <div class="max-card p-5 rounded-[2rem] flex justify-between items-center border-l-4 border-indigo-600">
+                <div><h4 class="font-bold text-sm">${item.method}</h4><p class="text-[9px] text-slate-400">${item.date}</p></div>
+                <div class="text-right"><p class="text-sm font-black">৳${item.amt}</p><p class="text-[9px] text-green-500 uppercase font-black">Success</p></div>
+            </div>
+        `).join('');
+    }
+
+    function startSlider() {
+        let i = 0;
+        setInterval(() => {
+            i = (i + 1) % CONFIG.app.banners.length;
+            document.getElementById('slider-engine').style.transform = `translateX(-${i * 100}%)`;
+        }, 4000);
+    }
+
+    function showToast(m) {
+        const t = document.getElementById('toast');
+        document.getElementById('toast-msg').innerText = m;
+        t.classList.remove('hidden');
+        setTimeout(() => t.classList.add('hidden'), 3000);
+    }
+
+    function copyInvite() {
+        const box = document.getElementById('refer-link-box');
+        box.select();
+        navigator.clipboard.writeText(box.value);
+        showToast("🔗 Link Copied!");
+    }
+
+    initApp();
+</script>
+
+<script src='https://alwingulla.com/88/tag.min.js' data-zone='892110' async data-cfasync='false'></script>
 </body>
 </html>
