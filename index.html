@@ -3,89 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobile Video Feed</title>
+    <!-- Referrer Policy hide করার জন্য এই মেটা ট্যাগটি জরুরি -->
+    <meta name="referrer" content="no-referrer">
+    <title>Mobile Video Player</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* স্ক্রলবার হাইড করার জন্য */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        
-        /* ভিডিও কন্টেইনার ফুল মোবাইল হাইট */
-        .video-wrapper {
-            width: 100%;
-            height: 80vh; /* মোবাইলে ভিডিওর উচ্চতা */
-            background: #000;
-            margin-bottom: 10px;
+        body { background-color: #000; margin: 0; padding: 0; }
+        .video-container {
             position: relative;
+            width: 100%;
+            /* ৫১০x৪০০ রেশিও অনুযায়ী হাইট */
+            padding-bottom: 78.43%; 
+            height: 0;
+            background: #111;
+            margin-bottom: 15px;
         }
-
-        iframe {
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100% !important;
             height: 100% !important;
             border: none;
         }
     </style>
 </head>
-<body class="bg-black text-white no-scrollbar">
+<body>
 
-    <!-- Main Container (Mobile Responsive Only) -->
-    <div class="max-w-md mx-auto w-full flex flex-col overflow-y-auto h-screen">
-        
+    <div class="max-w-md mx-auto">
         <!-- Video 1 -->
-        <div class="video-wrapper overflow-hidden rounded-b-xl shadow-lg">
+        <div class="video-container">
             <iframe 
                 src="https://www.xnxx.com/embedframe/uecmkvvb033" 
                 frameborder="0" 
                 scrolling="no" 
                 allowfullscreen="true"
-                referrerpolicy="no-referrer"
-                loading="lazy">
+                sandbox="allow-forms allow-scripts allow-pointer-lock allow-same-origin allow-top-navigation"
+                referrerpolicy="no-referrer">
             </iframe>
         </div>
 
         <!-- Video 2 -->
-        <div class="video-wrapper overflow-hidden rounded-xl shadow-lg">
+        <div class="video-container">
             <iframe 
                 src="https://www.xnxx.com/embedframe/opftmio1f38" 
                 frameborder="0" 
                 scrolling="no" 
                 allowfullscreen="true"
-                referrerpolicy="no-referrer"
-                loading="lazy">
+                sandbox="allow-forms allow-scripts allow-pointer-lock allow-same-origin allow-top-navigation"
+                referrerpolicy="no-referrer">
             </iframe>
         </div>
-
-        <!-- Footer Space for More Overflow Feel -->
-        <div class="h-20 w-full flex items-center justify-center text-gray-600 text-sm italic">
-            End of Feed
-        </div>
-
     </div>
 
     <script>
-        // Vanilla JS for optimization
-        document.addEventListener("DOMContentLoaded", () => {
-            // CORS বা কানেকশন এরর হ্যান্ডেল করার জন্য
+        // ভিডিও লোড না হলে অটো রিফ্রেশ বা মেসেজ দেখানোর জন্য
+        window.onload = function() {
             const iframes = document.querySelectorAll('iframe');
-            
-            iframes.forEach(iframe => {
-                // ভিডিও লোড স্পিড বাড়ানোর ট্রিক
-                iframe.setAttribute('importance', 'high');
-                
-                // যদি ফ্রেম ব্লক হয় তবে কনসোল ওয়ার্নিং এড়ানোর জন্য
-                iframe.onerror = function() {
-                    console.warn("Video content could not be loaded due to provider restrictions.");
+            iframes.forEach(f => {
+                // কোনো এরর হলে কনসোলে দেখাবে
+                f.onerror = function() {
+                    console.log("Loading failed, check domain restrictions.");
                 };
             });
-        });
-
-        // ব্রাউজার যদি স্ক্রল লক করে তবে তা রিলিজ করা
-        document.body.style.overflow = "auto";
+        };
     </script>
 </body>
 </html>
